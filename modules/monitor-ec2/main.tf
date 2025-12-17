@@ -141,8 +141,9 @@ module "disk_alarm" {
 
   dimensions = {
     InstanceId = local.resolved_ids[each.key]
-    path       = "/"
-    fstype     = "ext4"
+    path       = coalesce(each.value.disk_path, var.disk_path)
+    fstype     = coalesce(each.value.disk_fstype, var.disk_fstype)
+    device     = coalesce(each.value.disk_device, var.disk_device)
   }
 
   tags = merge(var.tags, {

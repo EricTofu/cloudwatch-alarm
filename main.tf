@@ -98,6 +98,9 @@ module "monitor_ec2" {
   cpu_threshold          = var.ec2_cpu_threshold
   memory_threshold       = var.ec2_memory_threshold
   disk_threshold         = var.ec2_disk_threshold
+  disk_path              = var.ec2_disk_path
+  disk_device            = var.ec2_disk_device
+  disk_fstype            = var.ec2_disk_fstype
   network_in_threshold   = var.ec2_network_in_threshold
   network_out_threshold  = var.ec2_network_out_threshold
   period                 = var.ec2_period

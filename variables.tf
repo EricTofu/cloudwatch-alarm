@@ -79,6 +79,9 @@ variable "ec2_instances" {
     cpu_threshold        = optional(number)
     memory_threshold     = optional(number)
     disk_threshold       = optional(number)
+    disk_path            = optional(string)
+    disk_device          = optional(string)
+    disk_fstype          = optional(string)
     network_in_threshold = optional(number)
     network_out_threshold = optional(number)
 
@@ -103,6 +106,9 @@ variable "ec2_cpu_threshold" {
 }
 variable "ec2_memory_threshold" { default = 80 }
 variable "ec2_disk_threshold" { default = 80 }
+variable "ec2_disk_path" { default = "/" }
+variable "ec2_disk_device" { default = "nvme0n1p1" }
+variable "ec2_disk_fstype" { default = "ext4" }
 variable "ec2_network_in_threshold" { default = 100000000 }  # 100MB/s
 variable "ec2_network_out_threshold" { default = 100000000 } # 100MB/s
 variable "ec2_period" { default = 300 }

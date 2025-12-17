@@ -6,6 +6,9 @@ variable "instances_config" {
     cpu_threshold        = optional(number)
     memory_threshold     = optional(number)
     disk_threshold       = optional(number)
+    disk_path            = optional(string)
+    disk_device          = optional(string)
+    disk_fstype          = optional(string)
     network_in_threshold = optional(number)
     network_out_threshold = optional(number)
     period               = optional(number)
@@ -29,6 +32,9 @@ variable "project" {
 variable "cpu_threshold" {}
 variable "memory_threshold" {}
 variable "disk_threshold" {}
+variable "disk_path" {}
+variable "disk_device" {}
+variable "disk_fstype" {}
 variable "network_in_threshold" {}
 variable "network_out_threshold" {}
 variable "period" {}
