@@ -29,6 +29,7 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
       expression  = "MAX(SEARCH('{AWS/EC2,InstanceId,AutoScalingGroupName} MetricName=\"CPUUtilization\" \"AutoScalingGroupName\"=\"${each.key}\"', 'Average', ${coalesce(each.value.period, var.period)}))"
       label       = "Max CPU Utilization"
       return_data = true
+      period      = coalesce(each.value.period, var.period)
     }
   }
 
@@ -60,6 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "status_check_failed" {
       expression  = "MAX(SEARCH('{AWS/EC2,InstanceId,AutoScalingGroupName} MetricName=\"StatusCheckFailed\" \"AutoScalingGroupName\"=\"${each.key}\"', 'Maximum', ${coalesce(each.value.period, var.period)}))"
       label       = "Max Status Check Failed"
       return_data = true
+      period      = coalesce(each.value.period, var.period)
     }
   }
 
@@ -91,6 +93,7 @@ resource "aws_cloudwatch_metric_alarm" "high_memory" {
       expression  = "MAX(SEARCH('{CWAgent,InstanceId,AutoScalingGroupName} MetricName=\"mem_used_percent\" \"AutoScalingGroupName\"=\"${each.key}\"', 'Average', ${coalesce(each.value.period, var.period)}))"
       label       = "Max Memory Utilization"
       return_data = true
+      period      = coalesce(each.value.period, var.period)
     }
   }
 
@@ -122,6 +125,7 @@ resource "aws_cloudwatch_metric_alarm" "high_disk" {
       expression  = "MAX(SEARCH('{CWAgent,InstanceId,AutoScalingGroupName,path,fstype} MetricName=\"disk_used_percent\" \"AutoScalingGroupName\"=\"${each.key}\" \"path\"=\"/\" \"fstype\"=\"ext4\"', 'Average', ${coalesce(each.value.period, var.period)}))"
       label       = "Max Disk Utilization"
       return_data = true
+      period      = coalesce(each.value.period, var.period)
     }
   }
 
@@ -153,6 +157,7 @@ resource "aws_cloudwatch_metric_alarm" "high_network_in" {
       expression  = "MAX(SEARCH('{AWS/EC2,InstanceId,AutoScalingGroupName} MetricName=\"NetworkIn\" \"AutoScalingGroupName\"=\"${each.key}\"', 'Average', ${coalesce(each.value.period, var.period)}))"
       label       = "Max Network In"
       return_data = true
+      period      = coalesce(each.value.period, var.period)
     }
   }
 
@@ -184,6 +189,7 @@ resource "aws_cloudwatch_metric_alarm" "high_network_out" {
       expression  = "MAX(SEARCH('{AWS/EC2,InstanceId,AutoScalingGroupName} MetricName=\"NetworkOut\" \"AutoScalingGroupName\"=\"${each.key}\"', 'Average', ${coalesce(each.value.period, var.period)}))"
       label       = "Max Network Out"
       return_data = true
+      period      = coalesce(each.value.period, var.period)
     }
   }
 
