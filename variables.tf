@@ -81,7 +81,7 @@ variable "ec2_instances" {
     disk_threshold       = optional(number)
     network_in_threshold = optional(number)
     network_out_threshold = optional(number)
-    network_out_threshold = optional(number)
+
     period               = optional(number)
     eval_periods         = optional(number)
     enable_cpu              = optional(bool)
