@@ -81,8 +81,15 @@ variable "ec2_instances" {
     disk_threshold       = optional(number)
     network_in_threshold = optional(number)
     network_out_threshold = optional(number)
+    network_out_threshold = optional(number)
     period               = optional(number)
     eval_periods         = optional(number)
+    enable_cpu              = optional(bool)
+    enable_memory           = optional(bool)
+    enable_disk             = optional(bool)
+    enable_network_in       = optional(bool)
+    enable_network_out      = optional(bool)
+    enable_status_check     = optional(bool)
   }))
   default = {}
 }
@@ -123,6 +130,12 @@ variable "auto_scaling_groups" {
     status_check_threshold = optional(number)
     period                 = optional(number)
     eval_periods           = optional(number)
+    enable_cpu              = optional(bool)
+    enable_memory           = optional(bool)
+    enable_disk             = optional(bool)
+    enable_network_in       = optional(bool)
+    enable_network_out      = optional(bool)
+    enable_status_check     = optional(bool)
   }))
   default = {}
 }
@@ -188,6 +201,11 @@ variable "rds_instances" {
     write_latency_threshold = optional(number)
     period                 = optional(number)
     eval_periods           = optional(number)
+    enable_cpu                = optional(bool)
+    enable_free_storage       = optional(bool)
+    enable_connections        = optional(bool)
+    enable_read_latency       = optional(bool)
+    enable_write_latency      = optional(bool)
   }))
   default = {}
 }
@@ -216,6 +234,10 @@ variable "lambda_functions" {
     concurrent_executions_threshold = optional(number)
     period             = optional(number)
     eval_periods       = optional(number)
+    enable_errors                   = optional(bool)
+    enable_throttles                = optional(bool)
+    enable_duration                 = optional(bool)
+    enable_concurrent_executions    = optional(bool)
   }))
   default = {}
 }
@@ -239,6 +261,7 @@ variable "albs" {
     htt_5xx_threshold = optional(number)
     period            = optional(number)
     eval_periods      = optional(number)
+    enable_alb_5xx    = optional(bool)
   }))
   default = {}
 }
@@ -248,6 +271,7 @@ variable "target_groups" {
     htt_5xx_threshold = optional(number)
     period            = optional(number)
     eval_periods      = optional(number)
+    enable_target_group_5xx = optional(bool)
   }))
   default = {}
 }
@@ -268,6 +292,8 @@ variable "api_gateways" {
     latency_threshold   = optional(number)
     period              = optional(number)
     eval_periods        = optional(number)
+    enable_5xx          = optional(bool)
+    enable_latency      = optional(bool)
   }))
   default = {}
 }
@@ -288,6 +314,8 @@ variable "s3_buckets" {
     error_5xx_threshold = optional(number)
     period              = optional(number)
     eval_periods        = optional(number)
+    enable_4xx          = optional(bool)
+    enable_5xx          = optional(bool)
   }))
   default = {}
 }
