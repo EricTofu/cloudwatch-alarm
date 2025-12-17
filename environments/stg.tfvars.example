@@ -1,4 +1,5 @@
 # Staging Environment Configuration
+ENV = "stg"
 
 # AWS Configuration
 aws_region = "us-east-1"

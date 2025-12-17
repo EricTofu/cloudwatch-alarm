@@ -1,9 +1,9 @@
-variable "TF_ENV" {
+variable "ENV" {
   description = "Environment: dev, stg, or prod"
   type        = string
   validation {
-    condition     = contains(["dev", "stg", "prod"], var.TF_ENV)
-    error_message = "TF_ENV must be dev, stg, or prod"
+    condition     = contains(["dev", "stg", "prod"], var.ENV)
+    error_message = "ENV must be dev, stg, or prod"
   }
 }
 
@@ -14,7 +14,7 @@ variable "project" {
 }
 
 variable "aws_profile" {
-  description = "AWS CLI profile name (must match TF_ENV)"
+  description = "AWS CLI profile name (must match ENV)"
   type        = string
 }
 

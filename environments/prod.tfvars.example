@@ -1,4 +1,5 @@
 # Production Environment Configuration
+ENV = "prod"
 
 # Global project name (optional, can be overridden per-resource)
 project = ""

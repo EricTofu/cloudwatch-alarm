@@ -4,7 +4,7 @@ provider "aws" {
   
   default_tags {
     tags = merge(var.tags, {
-      Environment = var.TF_ENV
+      Environment = var.ENV
       Project     = var.project
       ManagedBy   = "Terraform"
     })
@@ -13,7 +13,7 @@ provider "aws" {
 
 # Validate profile matches environment
 locals {
-  expected_profile = var.environment_profile_map[var.TF_ENV]
+  expected_profile = var.environment_profile_map[var.ENV]
   profile_matches  = var.aws_profile == local.expected_profile
 }
 
@@ -21,7 +21,7 @@ resource "null_resource" "profile_validation" {
   lifecycle {
     precondition {
       condition     = local.profile_matches
-      error_message = "Profile mismatch! Environment '${var.TF_ENV}' requires profile '${local.expected_profile}' but got '${var.aws_profile}'"
+      error_message = "Profile mismatch! Environment '${var.ENV}' requires profile '${local.expected_profile}' but got '${var.aws_profile}'"
     }
   }
 }
@@ -31,23 +31,23 @@ resource "null_resource" "profile_validation" {
 
 resource "aws_sns_topic" "alerts_critical" {
   count = lookup(var.sns_topic_arns, "critical", null) == null ? 1 : 0
-  name  = "cloudwatch-alerts-critical-${var.TF_ENV}"
+  name  = "cloudwatch-alerts-critical-${var.ENV}"
 }
 
 resource "aws_sns_topic" "alerts_warning" {
   count = lookup(var.sns_topic_arns, "warning", null) == null ? 1 : 0
-  name  = "cloudwatch-alerts-warning-${var.TF_ENV}"
+  name  = "cloudwatch-alerts-warning-${var.ENV}"
 }
 
 resource "aws_sns_topic" "alerts_info" {
   count = lookup(var.sns_topic_arns, "info", null) == null ? 1 : 0
-  name  = "cloudwatch-alerts-info-${var.TF_ENV}"
+  name  = "cloudwatch-alerts-info-${var.ENV}"
 }
 
 # Legacy single topic for backward compatibility
 resource "aws_sns_topic" "alerts" {
   count = var.alarm_email != null ? 1 : 0
-  name  = "cloudwatch-alerts-topic-${var.TF_ENV}"
+  name  = "cloudwatch-alerts-topic-${var.ENV}"
 }
 
 locals {

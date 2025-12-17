@@ -101,13 +101,81 @@ rds_instances = {
 # Lambda Monitoring
 lambda_functions = {
   "api-handler" = {}
-  "batch-processor" = {
-    duration_threshold = 270000  # 4.5 minutes
-  }
-}
+1.  Copy the example configuration:
+    ```bash
+    cp environments/dev.tfvars.example dev.tfvars
+    ```
+
+2.  Edit `dev.tfvars` with your specifics:
+
+    ```hcl
+    aws_region = "us-east-1"
+
+    # Email notifications by severity
+    alarm_emails = {
+      critical = ["oncall@example.com"]
+      warning  = ["team@example.com"]
+      info     = ["logs@example.com"]
+    }
+
+    # EC2 Monitoring (IDs auto-resolve to Names)
+    ec2_instances = {
+      "i-1234567890abcdef0" = {}  # Uses defaults
+      "i-critical-server" = {
+        cpu_threshold = 70        # Custom threshold
+        period        = 60        # Check every 1 minute
+      }
+    }
+
+    # Auto Scaling Group Monitoring (Dynamic)
+    auto_scaling_groups = {
+      "my-app-asg" = {            # Name of the ASG
+        cpu_threshold      = 75
+        memory_threshold   = 80   # Requires CW Agent
+        disk_threshold     = 85   # Requires CW Agent
+        network_in_threshold = 100000000
+        period             = 60
+        severity           = "critical" # Override severity
+      }
+    }
+
+    # Note: ASG alarms use CloudWatch SEARCH expressions with MAX aggregation.
+    # A single alarm tracks all instances. If ANY instance breaches the threshold,
+    # the alarm fires. This provides zero-maintenance monitoring.
+
+
+    # RDS Monitoring
+    rds_instances = {
+      "production-db" = {
+        connections_threshold = 90
+      }
+    }
+
+    # Lambda Monitoring
+    lambda_functions = {
+      "api-handler" = {}
+      "batch-processor" = {
+        duration_threshold = 270000  # 4.5 minutes
+      }
+    }
+    ```
+
+### Environment Safety (Human-Miss Prevention)
+To ensure operators always know which environment they are touching, this project **requires** the `aws_profile` to be specified explicitly at runtime. It is intentionally NOT included in the `.tfvars` files.
+
+You must provide it via the command line or environment variable:
+
+```bash
+# Option 1: Pass as a variable flag (Recommended for visibility)
+terraform plan -var-file=environments/dev.tfvars -var="aws_profile=my-dev-profile"
+
+# Option 2: Use TF_VAR environment variable
+TF_VAR_aws_profile=my-dev-profile terraform plan -var-file=environments/dev.tfvars
 ```
 
-### Running Terraform
+If you forget to provide `aws_profile`, Terraform will error and ask for it, preventing accidental application of changes to the wrong account.
+
+### Deployment Commands
 
 **1. Initialize**
 ```bash
@@ -115,21 +183,13 @@ terraform init
 ```
 
 **2. Plan**
-Always check what Terraform will do before applying.
-
-Using a specific tfvars file (Recommended):
 ```bash
-terraform plan -var-file="dev.tfvars"
-```
-
-Using command-line overrides:
-```bash
-terraform plan -var="TF_ENV=dev" -var="aws_profile=my-profile"
+# Example for DEV
+# NOTE: ENV is defined inside dev.tfvars, so you don't need to pass it separately.
+terraform plan -var-file="environments/dev.tfvars" -var="aws_profile=dev-profile"
 ```
 
 **3. Apply**
-Apply the changes.
-
 ```bash
 terraform apply -var-file="dev.tfvars"
 ```
