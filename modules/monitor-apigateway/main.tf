@@ -12,8 +12,16 @@ module "error_5xx_alarm" {
   statistic           = "Sum"
   threshold           = coalesce(each.value.error_5xx_threshold, var.error_5xx_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High 5XX on API GW ${each.key} (Threshold: ${coalesce(each.value.error_5xx_threshold, var.error_5xx_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     ApiName = each.key
@@ -38,8 +46,16 @@ module "latency_alarm" {
   statistic           = "Average"
   threshold           = coalesce(each.value.latency_threshold, var.latency_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High latency on API GW ${each.key} (Threshold: ${coalesce(each.value.latency_threshold, var.latency_threshold)} ms)"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     ApiName = each.key

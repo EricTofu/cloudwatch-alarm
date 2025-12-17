@@ -2,6 +2,7 @@ variable "instances_config" {
   description = "Map of instances with config"
   type = map(object({
     project              = optional(string)
+    severity             = optional(string)
     cpu_threshold        = optional(number)
     memory_threshold     = optional(number)
     disk_threshold       = optional(number)

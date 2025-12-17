@@ -121,6 +121,7 @@ module "monitor_rds" {
   eval_periods           = var.rds_eval_periods
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
+  alarm_sns_topic_info     = local.info_topic_arn
 }
 
 module "monitor_lambda" {
@@ -136,6 +137,7 @@ module "monitor_lambda" {
   eval_periods       = var.lambda_eval_periods
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
+  alarm_sns_topic_info     = local.info_topic_arn
 }
 
 module "monitor_alb" {
@@ -149,6 +151,8 @@ module "monitor_alb" {
   period                     = var.alb_period
   eval_periods               = var.alb_eval_periods
   alarm_sns_topic_critical = local.critical_topic_arn
+  alarm_sns_topic_warning  = local.warning_topic_arn
+  alarm_sns_topic_info     = local.info_topic_arn
 }
 
 module "monitor_apigateway" {
@@ -161,6 +165,8 @@ module "monitor_apigateway" {
   period              = var.api_gateway_period
   eval_periods        = var.api_gateway_eval_periods
   alarm_sns_topic_critical = local.critical_topic_arn
+  alarm_sns_topic_warning  = local.warning_topic_arn
+  alarm_sns_topic_info     = local.info_topic_arn
 }
 
 module "monitor_s3" {
@@ -173,6 +179,8 @@ module "monitor_s3" {
   period              = var.s3_period
   eval_periods        = var.s3_eval_periods
   alarm_sns_topic_critical = local.critical_topic_arn
+  alarm_sns_topic_warning  = local.warning_topic_arn
+  alarm_sns_topic_info     = local.info_topic_arn
 }
 
 module "monitor_asg" {

@@ -107,11 +107,31 @@ lambda_functions = {
 }
 ```
 
-### Deploy
+### Running Terraform
+
+**1. Initialize**
+```bash
+terraform init
+```
+
+**2. Plan**
+Always check what Terraform will do before applying.
+
+Using a specific tfvars file (Recommended):
+```bash
+terraform plan -var-file="dev.tfvars"
+```
+
+Using command-line overrides:
+```bash
+terraform plan -var="TF_ENV=dev" -var="aws_profile=my-profile"
+```
+
+**3. Apply**
+Apply the changes.
 
 ```bash
-terraform plan
-terraform apply
+terraform apply -var-file="dev.tfvars"
 ```
 
 ## Configuration Guide

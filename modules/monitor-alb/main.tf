@@ -24,8 +24,16 @@ module "target_5xx_alarm" {
   statistic           = "Sum"
   threshold           = coalesce(each.value.htt_5xx_threshold, var.target_group_5xx_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High 5XX on target group ${each.key} (Threshold: ${coalesce(each.value.htt_5xx_threshold, var.target_group_5xx_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     # Resolve the ARN Suffix dynamically
@@ -52,8 +60,16 @@ module "alb_5xx_alarm" {
   statistic           = "Sum"
   threshold           = coalesce(each.value.htt_5xx_threshold, var.alb_5xx_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High 5XX on ALB ${each.key} (Threshold: ${coalesce(each.value.htt_5xx_threshold, var.alb_5xx_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     # Resolve the ARN Suffix dynamically

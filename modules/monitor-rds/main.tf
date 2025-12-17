@@ -12,8 +12,16 @@ module "cpu_alarm" {
   statistic           = "Average"
   threshold           = coalesce(each.value.cpu_threshold, var.cpu_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}CPU too high on RDS ${each.key} (Threshold: ${coalesce(each.value.cpu_threshold, var.cpu_threshold)}%)"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     DBInstanceIdentifier = each.key
@@ -39,8 +47,16 @@ module "free_storage_space" {
   statistic           = "Average"
   threshold           = coalesce(each.value.free_storage_threshold, var.free_storage_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}Storage low on RDS ${each.key} (Threshold: ${coalesce(each.value.free_storage_threshold, var.free_storage_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_warning]
-  ok_actions          = [var.alarm_sns_topic_warning]
+  alarm_actions       = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
+  ok_actions          = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
 
   dimensions = {
     DBInstanceIdentifier = each.key
@@ -66,8 +82,16 @@ module "database_connections" {
   statistic           = "Average"
   threshold           = coalesce(each.value.connections_threshold, var.connections_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High database connections on RDS ${each.key} (Threshold: ${coalesce(each.value.connections_threshold, var.connections_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_warning]
-  ok_actions          = [var.alarm_sns_topic_warning]
+  alarm_actions       = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
+  ok_actions          = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
 
   dimensions = {
     DBInstanceIdentifier = each.key
@@ -93,8 +117,16 @@ module "read_latency" {
   statistic           = "Average"
   threshold           = coalesce(each.value.read_latency_threshold, var.read_latency_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High read latency on RDS ${each.key} (Threshold: ${coalesce(each.value.read_latency_threshold, var.read_latency_threshold)}s)"
-  alarm_actions       = [var.alarm_sns_topic_warning]
-  ok_actions          = [var.alarm_sns_topic_warning]
+  alarm_actions       = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
+  ok_actions          = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
 
   dimensions = {
     DBInstanceIdentifier = each.key
@@ -119,8 +151,16 @@ module "write_latency" {
   statistic           = "Average"
   threshold           = coalesce(each.value.write_latency_threshold, var.write_latency_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High write latency on RDS ${each.key} (Threshold: ${coalesce(each.value.write_latency_threshold, var.write_latency_threshold)}s)"
-  alarm_actions       = [var.alarm_sns_topic_warning]
-  ok_actions          = [var.alarm_sns_topic_warning]
+  alarm_actions       = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
+  ok_actions          = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
 
   dimensions = {
     DBInstanceIdentifier = each.key

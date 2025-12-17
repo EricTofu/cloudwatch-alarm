@@ -12,8 +12,16 @@ module "error_alarm" {
   statistic           = "Sum"
   threshold           = coalesce(each.value.error_threshold, var.error_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}Lambda ${each.key} errors (Threshold: ${coalesce(each.value.error_threshold, var.error_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     FunctionName = each.key
@@ -39,8 +47,16 @@ module "throttles_alarm" {
   statistic           = "Sum"
   threshold           = coalesce(each.value.throttle_threshold, var.throttle_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}Lambda ${each.key} throttles (Threshold: ${coalesce(each.value.throttle_threshold, var.throttle_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     FunctionName = each.key
@@ -66,8 +82,16 @@ module "duration_alarm" {
   statistic           = "Average"
   threshold           = coalesce(each.value.duration_threshold, var.duration_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}Lambda ${each.key} duration approaching timeout (Threshold: ${coalesce(each.value.duration_threshold, var.duration_threshold)}ms)"
-  alarm_actions       = [var.alarm_sns_topic_warning]
-  ok_actions          = [var.alarm_sns_topic_warning]
+  alarm_actions       = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
+  ok_actions          = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
 
   dimensions = {
     FunctionName = each.key
@@ -93,8 +117,16 @@ module "concurrent_executions_alarm" {
   statistic           = "Maximum"
   threshold           = coalesce(each.value.concurrent_executions_threshold, var.concurrent_executions_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}Lambda ${each.key} concurrent executions approaching limit (Threshold: ${coalesce(each.value.concurrent_executions_threshold, var.concurrent_executions_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_warning]
-  ok_actions          = [var.alarm_sns_topic_warning]
+  alarm_actions       = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
+  ok_actions          = [
+    each.value.severity == "critical" ? var.alarm_sns_topic_critical :
+    each.value.severity == "info"     ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_warning
+  ]
 
   dimensions = {
     FunctionName = each.key

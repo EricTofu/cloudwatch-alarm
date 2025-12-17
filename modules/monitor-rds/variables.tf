@@ -2,6 +2,7 @@ variable "instances_config" {
   description = "Map of RDS instances with config"
   type = map(object({
     cpu_threshold          = optional(number)
+    severity               = optional(string)
     free_storage_threshold = optional(number)
     connections_threshold  = optional(number)
     read_latency_threshold = optional(number)
@@ -34,6 +35,12 @@ variable "alarm_sns_topic_critical" {
 variable "alarm_sns_topic_warning" {
   description = "SNS topic ARN for warning alarms"
   type        = string
+}
+
+variable "alarm_sns_topic_info" {
+  description = "SNS topic ARN for info alarms"
+  type        = string
+  default     = "" # Optional if logic handles empty, but better to enforce or use null
 }
 
 

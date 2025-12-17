@@ -12,8 +12,16 @@ module "error_4xx_alarm" {
   statistic           = "Sum"
   threshold           = coalesce(each.value.error_4xx_threshold, var.error_4xx_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High 4XX on S3 ${each.key} (Threshold: ${coalesce(each.value.error_4xx_threshold, var.error_4xx_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     BucketName = each.key
@@ -39,8 +47,16 @@ module "error_5xx_alarm" {
   statistic           = "Sum"
   threshold           = coalesce(each.value.error_5xx_threshold, var.error_5xx_threshold)
   alarm_description   = "${var.project != "" ? "[${var.project}] " : ""}High 5XX on S3 ${each.key} (Threshold: ${coalesce(each.value.error_5xx_threshold, var.error_5xx_threshold)})"
-  alarm_actions       = [var.alarm_sns_topic_critical]
-  ok_actions          = [var.alarm_sns_topic_critical]
+  alarm_actions       = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
+  ok_actions          = [
+    each.value.severity == "warning" ? var.alarm_sns_topic_warning :
+    each.value.severity == "info"    ? var.alarm_sns_topic_info :
+    var.alarm_sns_topic_critical
+  ]
 
   dimensions = {
     BucketName = each.key

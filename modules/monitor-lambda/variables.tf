@@ -2,6 +2,7 @@ variable "functions_config" {
   description = "Map of Lambda functions with config"
   type = map(object({
     error_threshold    = optional(number)
+    severity           = optional(string)
     throttle_threshold = optional(number)
     duration_threshold = optional(number)
     concurrent_executions_threshold = optional(number)
@@ -32,6 +33,12 @@ variable "alarm_sns_topic_critical" {
 variable "alarm_sns_topic_warning" {
   description = "SNS topic ARN for warning alarms"
   type        = string
+}
+
+variable "alarm_sns_topic_info" {
+  description = "SNS topic ARN for info alarms"
+  type        = string
+  default     = ""
 }
 
 
