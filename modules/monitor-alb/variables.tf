@@ -4,7 +4,9 @@ variable "albs_config" {
     htt_5xx_threshold = optional(number)
     severity          = optional(string)
     period            = optional(number)
+    period            = optional(number)
     eval_periods      = optional(number)
+    enable_alb_5xx    = optional(bool)
   }))
   default = {}
 }
@@ -15,7 +17,9 @@ variable "target_groups_config" {
     htt_5xx_threshold = optional(number)
     severity          = optional(string)
     period            = optional(number)
+    period            = optional(number)
     eval_periods      = optional(number)
+    enable_target_group_5xx = optional(bool)
   }))
   default = {}
 }
@@ -29,7 +33,18 @@ variable "project" {
 variable "alb_5xx_threshold" {}
 variable "target_group_5xx_threshold" {}
 variable "period" {}
+variable "period" {}
 variable "eval_periods" {}
+
+# Global Enable Flags
+variable "enable_alb_5xx" {
+  type    = bool
+  default = true
+}
+variable "enable_target_group_5xx" {
+  type    = bool
+  default = true
+}
 
 variable "alarm_sns_topic_critical" {
   description = "SNS topic ARN for critical alarms"

@@ -7,7 +7,12 @@ variable "functions_config" {
     duration_threshold = optional(number)
     concurrent_executions_threshold = optional(number)
     period             = optional(number)
+    period             = optional(number)
     eval_periods       = optional(number)
+    enable_errors                   = optional(bool)
+    enable_throttles                = optional(bool)
+    enable_duration                 = optional(bool)
+    enable_concurrent_executions    = optional(bool)
   }))
   default = {}
 }
@@ -23,7 +28,26 @@ variable "throttle_threshold" {}
 variable "duration_threshold" {}
 variable "concurrent_executions_threshold" {}
 variable "period" {}
+variable "period" {}
 variable "eval_periods" {}
+
+# Global Enable Flags
+variable "enable_errors" {
+  type    = bool
+  default = true
+}
+variable "enable_throttles" {
+  type    = bool
+  default = true
+}
+variable "enable_duration" {
+  type    = bool
+  default = true
+}
+variable "enable_concurrent_executions" {
+  type    = bool
+  default = true
+}
 
 variable "alarm_sns_topic_critical" {
   description = "SNS topic ARN for critical alarms"

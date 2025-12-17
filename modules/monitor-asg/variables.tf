@@ -10,7 +10,14 @@ variable "auto_scaling_groups" {
     network_out_threshold  = optional(number)
     status_check_threshold = optional(number)
     period                 = optional(number)
+    period                 = optional(number)
     eval_periods           = optional(number)
+    enable_cpu              = optional(bool)
+    enable_memory           = optional(bool)
+    enable_disk             = optional(bool)
+    enable_network_in       = optional(bool)
+    enable_network_out      = optional(bool)
+    enable_status_check     = optional(bool)
   }))
   default = {}
 }
@@ -55,6 +62,32 @@ variable "eval_periods" {
   description = "Default number of evaluation periods"
   type        = number
   default     = 1
+}
+
+# Global Enable Flags
+variable "enable_cpu" {
+  type    = bool
+  default = true
+}
+variable "enable_memory" {
+  type    = bool
+  default = true
+}
+variable "enable_disk" {
+  type    = bool
+  default = true
+}
+variable "enable_network_in" {
+  type    = bool
+  default = true
+}
+variable "enable_network_out" {
+  type    = bool
+  default = true
+}
+variable "enable_status_check" {
+  type    = bool
+  default = true
 }
 
 variable "alarm_sns_topic_critical" {

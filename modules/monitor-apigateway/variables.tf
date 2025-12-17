@@ -5,7 +5,10 @@ variable "apis_config" {
     severity            = optional(string)
     latency_threshold   = optional(number)
     period              = optional(number)
+    period              = optional(number)
     eval_periods        = optional(number)
+    enable_5xx          = optional(bool)
+    enable_latency      = optional(bool)
   }))
   default = {}
 }
@@ -19,7 +22,18 @@ variable "project" {
 variable "error_5xx_threshold" {}
 variable "latency_threshold" {}
 variable "period" {}
+variable "period" {}
 variable "eval_periods" {}
+
+# Global Enable Flags
+variable "enable_5xx" {
+  type    = bool
+  default = true
+}
+variable "enable_latency" {
+  type    = bool
+  default = true
+}
 
 variable "alarm_sns_topic_critical" {
   description = "SNS topic ARN for critical alarms"

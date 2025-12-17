@@ -5,7 +5,10 @@ variable "buckets_config" {
     severity            = optional(string)
     error_5xx_threshold = optional(number)
     period              = optional(number)
+    period              = optional(number)
     eval_periods        = optional(number)
+    enable_4xx          = optional(bool)
+    enable_5xx          = optional(bool)
   }))
   default = {}
 }
@@ -19,7 +22,18 @@ variable "project" {
 variable "error_4xx_threshold" {}
 variable "error_5xx_threshold" {}
 variable "period" {}
+variable "period" {}
 variable "eval_periods" {}
+
+# Global Enable Flags
+variable "enable_4xx" {
+  type    = bool
+  default = true
+}
+variable "enable_5xx" {
+  type    = bool
+  default = true
+}
 
 variable "alarm_sns_topic_critical" {
   description = "SNS topic ARN for critical alarms"

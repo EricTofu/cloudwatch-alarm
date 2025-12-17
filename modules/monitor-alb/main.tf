@@ -12,7 +12,10 @@ data "aws_lb" "this" {
 module "target_5xx_alarm" {
   source = "../common-alarm"
 
-  for_each = var.target_groups_config
+  for_each = {
+    for k, v in var.target_groups_config : k => v
+    if coalesce(v.enable_target_group_5xx, var.enable_target_group_5xx, true)
+  }
 
   # Use Friendly Name in Alarm Name
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}tg-${each.key}-high-5xx"
@@ -48,7 +51,10 @@ module "target_5xx_alarm" {
 module "alb_5xx_alarm" {
   source = "../common-alarm"
 
-  for_each = var.albs_config
+  for_each = {
+    for k, v in var.albs_config : k => v
+    if coalesce(v.enable_alb_5xx, var.enable_alb_5xx, true)
+  }
 
   # Use Friendly Name in Alarm Name
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}alb-${each.key}-high-5xx"

@@ -10,6 +10,12 @@ variable "instances_config" {
     network_out_threshold = optional(number)
     period               = optional(number)
     eval_periods         = optional(number)
+    enable_cpu              = optional(bool)
+    enable_memory           = optional(bool)
+    enable_disk             = optional(bool)
+    enable_network_in       = optional(bool)
+    enable_network_out      = optional(bool)
+    enable_status_check     = optional(bool)
   }))
   default = {}
 }
@@ -27,6 +33,32 @@ variable "network_in_threshold" {}
 variable "network_out_threshold" {}
 variable "period" {}
 variable "eval_periods" {}
+
+# Global Enable Flags
+variable "enable_cpu" {
+  type    = bool
+  default = true
+}
+variable "enable_memory" {
+  type    = bool
+  default = true
+}
+variable "enable_disk" {
+  type    = bool
+  default = true
+}
+variable "enable_network_in" {
+  type    = bool
+  default = true
+}
+variable "enable_network_out" {
+  type    = bool
+  default = true
+}
+variable "enable_status_check" {
+  type    = bool
+  default = true
+}
 
 variable "alarm_sns_topic_critical" {
   description = "SNS topic ARN for critical alarms"

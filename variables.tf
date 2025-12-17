@@ -101,6 +101,14 @@ variable "ec2_network_out_threshold" { default = 100000000 } # 100MB/s
 variable "ec2_period" { default = 300 }
 variable "ec2_eval_periods" { default = 2 }
 
+# EC2 Enable/Disable Flags
+variable "ec2_enable_cpu" { default = true }
+variable "ec2_enable_memory" { default = true }
+variable "ec2_enable_disk" { default = true }
+variable "ec2_enable_network_in" { default = true }
+variable "ec2_enable_network_out" { default = true }
+variable "ec2_enable_status_check" { default = true }
+
 # Auto Scaling Groups
 variable "auto_scaling_groups" {
   description = "Configuration for Auto Scaling Group monitoring"
@@ -183,6 +191,13 @@ variable "rds_write_latency_threshold" { default = 0.01 } # 10ms
 variable "rds_period" { default = 300 }
 variable "rds_eval_periods" { default = 2 }
 
+# RDS Enable/Disable Flags
+variable "rds_enable_cpu" { default = true }
+variable "rds_enable_free_storage" { default = true }
+variable "rds_enable_connections" { default = true }
+variable "rds_enable_read_latency" { default = true }
+variable "rds_enable_write_latency" { default = true }
+
 # Lambda
 variable "lambda_functions" {
   description = "Map of Lambda functions to monitor. Key=Name, Value=Config"
@@ -202,6 +217,12 @@ variable "lambda_duration_threshold" { default = 25000 }  # 25 seconds (approach
 variable "lambda_concurrent_executions_threshold" { default = 900 }  # 90% of default 1000 limit
 variable "lambda_period" { default = 60 }
 variable "lambda_eval_periods" { default = 1 }
+
+# Lambda Enable/Disable Flags
+variable "lambda_enable_errors" { default = true }
+variable "lambda_enable_throttles" { default = true }
+variable "lambda_enable_duration" { default = true }
+variable "lambda_enable_concurrent_executions" { default = true }
 
 # ALB
 variable "albs" {
@@ -227,6 +248,10 @@ variable "target_group_5xx_threshold" { default = 0 }
 variable "alb_period" { default = 60 }
 variable "alb_eval_periods" { default = 1 }
 
+# ALB Enable/Disable Flags
+variable "alb_enable_5xx" { default = true }
+variable "target_group_enable_5xx" { default = true }
+
 # API Gateway
 variable "api_gateways" {
   description = "Map of APIs to monitor. Key=Name, Value=Config"
@@ -243,6 +268,10 @@ variable "api_gateway_latency_threshold" { default = 1000 }
 variable "api_gateway_period" { default = 60 }
 variable "api_gateway_eval_periods" { default = 1 }
 
+# API Gateway Enable/Disable Flags
+variable "api_gateway_enable_5xx" { default = true }
+variable "api_gateway_enable_latency" { default = true }
+
 # S3
 variable "s3_buckets" {
   description = "Map of S3 buckets to monitor. Key=Name, Value=Config"
@@ -258,3 +287,7 @@ variable "s3_4xx_threshold" { default = 10 }
 variable "s3_5xx_threshold" { default = 0 }
 variable "s3_period" { default = 86400 }
 variable "s3_eval_periods" { default = 1 }
+
+# S3 Enable/Disable Flags
+variable "s3_enable_4xx" { default = true }
+variable "s3_enable_5xx" { default = true }

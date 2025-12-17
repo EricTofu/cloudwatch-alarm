@@ -7,7 +7,10 @@ locals {
 }
 
 resource "aws_cloudwatch_metric_alarm" "high_cpu" {
-  for_each = var.auto_scaling_groups
+  for_each = {
+    for k, v in var.auto_scaling_groups : k => v
+    if coalesce(v.enable_cpu, var.enable_cpu, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-" : (var.project != "" ? "${var.project}-" : "")}asg-${each.key}-high-cpu"
   comparison_operator = "GreaterThanThreshold"
@@ -35,7 +38,10 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "status_check_failed" {
-  for_each = var.auto_scaling_groups
+  for_each = {
+    for k, v in var.auto_scaling_groups : k => v
+    if coalesce(v.enable_status_check, var.enable_status_check, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-" : (var.project != "" ? "${var.project}-" : "")}asg-${each.key}-status-check-failed"
   comparison_operator = "GreaterThanThreshold"
@@ -63,7 +69,10 @@ resource "aws_cloudwatch_metric_alarm" "status_check_failed" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "high_memory" {
-  for_each = var.auto_scaling_groups
+  for_each = {
+    for k, v in var.auto_scaling_groups : k => v
+    if coalesce(v.enable_memory, var.enable_memory, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-" : (var.project != "" ? "${var.project}-" : "")}asg-${each.key}-high-memory"
   comparison_operator = "GreaterThanThreshold"
@@ -91,7 +100,10 @@ resource "aws_cloudwatch_metric_alarm" "high_memory" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "high_disk" {
-  for_each = var.auto_scaling_groups
+  for_each = {
+    for k, v in var.auto_scaling_groups : k => v
+    if coalesce(v.enable_disk, var.enable_disk, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-" : (var.project != "" ? "${var.project}-" : "")}asg-${each.key}-high-disk"
   comparison_operator = "GreaterThanThreshold"
@@ -119,7 +131,10 @@ resource "aws_cloudwatch_metric_alarm" "high_disk" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "high_network_in" {
-  for_each = var.auto_scaling_groups
+  for_each = {
+    for k, v in var.auto_scaling_groups : k => v
+    if coalesce(v.enable_network_in, var.enable_network_in, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-" : (var.project != "" ? "${var.project}-" : "")}asg-${each.key}-high-network-in"
   comparison_operator = "GreaterThanThreshold"
@@ -147,7 +162,10 @@ resource "aws_cloudwatch_metric_alarm" "high_network_in" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "high_network_out" {
-  for_each = var.auto_scaling_groups
+  for_each = {
+    for k, v in var.auto_scaling_groups : k => v
+    if coalesce(v.enable_network_out, var.enable_network_out, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-" : (var.project != "" ? "${var.project}-" : "")}asg-${each.key}-high-network-out"
   comparison_operator = "GreaterThanThreshold"

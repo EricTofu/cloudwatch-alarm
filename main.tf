@@ -105,6 +105,12 @@ module "monitor_ec2" {
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
   alarm_sns_topic_info     = local.info_topic_arn
+  enable_cpu              = var.ec2_enable_cpu
+  enable_memory           = var.ec2_enable_memory
+  enable_disk             = var.ec2_enable_disk
+  enable_network_in       = var.ec2_enable_network_in
+  enable_network_out      = var.ec2_enable_network_out
+  enable_status_check     = var.ec2_enable_status_check
 }
 
 module "monitor_rds" {
@@ -122,6 +128,11 @@ module "monitor_rds" {
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
   alarm_sns_topic_info     = local.info_topic_arn
+  enable_cpu                = var.rds_enable_cpu
+  enable_free_storage       = var.rds_enable_free_storage
+  enable_connections        = var.rds_enable_connections
+  enable_read_latency       = var.rds_enable_read_latency
+  enable_write_latency      = var.rds_enable_write_latency
 }
 
 module "monitor_lambda" {
@@ -138,6 +149,10 @@ module "monitor_lambda" {
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
   alarm_sns_topic_info     = local.info_topic_arn
+  enable_errors                 = var.lambda_enable_errors
+  enable_throttles              = var.lambda_enable_throttles
+  enable_duration               = var.lambda_enable_duration
+  enable_concurrent_executions  = var.lambda_enable_concurrent_executions
 }
 
 module "monitor_alb" {
@@ -153,6 +168,8 @@ module "monitor_alb" {
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
   alarm_sns_topic_info     = local.info_topic_arn
+  enable_alb_5xx            = var.alb_enable_5xx
+  enable_target_group_5xx   = var.target_group_enable_5xx
 }
 
 module "monitor_apigateway" {
@@ -167,6 +184,8 @@ module "monitor_apigateway" {
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
   alarm_sns_topic_info     = local.info_topic_arn
+  enable_5xx                = var.api_gateway_enable_5xx
+  enable_latency            = var.api_gateway_enable_latency
 }
 
 module "monitor_s3" {
@@ -181,6 +200,8 @@ module "monitor_s3" {
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
   alarm_sns_topic_info     = local.info_topic_arn
+  enable_4xx                = var.s3_enable_4xx
+  enable_5xx                = var.s3_enable_5xx
 }
 
 module "monitor_asg" {
@@ -198,4 +219,10 @@ module "monitor_asg" {
   alarm_sns_topic_critical = local.critical_topic_arn
   alarm_sns_topic_warning  = local.warning_topic_arn
   alarm_sns_topic_info     = local.info_topic_arn
+  enable_cpu              = var.asg_enable_cpu
+  enable_memory           = var.asg_enable_memory
+  enable_disk             = var.asg_enable_disk
+  enable_network_in       = var.asg_enable_network_in
+  enable_network_out      = var.asg_enable_network_out
+  enable_status_check     = var.asg_enable_status_check
 }

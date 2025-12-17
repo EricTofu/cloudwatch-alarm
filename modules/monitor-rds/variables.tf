@@ -9,6 +9,11 @@ variable "instances_config" {
     write_latency_threshold = optional(number)
     period                 = optional(number)
     eval_periods           = optional(number)
+    enable_cpu                = optional(bool)
+    enable_free_storage       = optional(bool)
+    enable_connections        = optional(bool)
+    enable_read_latency       = optional(bool)
+    enable_write_latency      = optional(bool)
   }))
   default = {}
 }
@@ -26,6 +31,28 @@ variable "read_latency_threshold" {}
 variable "write_latency_threshold" {}
 variable "period" {}
 variable "eval_periods" {}
+
+# Global Enable Flags
+variable "enable_cpu" {
+  type    = bool
+  default = true
+}
+variable "enable_free_storage" {
+  type    = bool
+  default = true
+}
+variable "enable_connections" {
+  type    = bool
+  default = true
+}
+variable "enable_read_latency" {
+  type    = bool
+  default = true
+}
+variable "enable_write_latency" {
+  type    = bool
+  default = true
+}
 
 variable "alarm_sns_topic_critical" {
   description = "SNS topic ARN for critical alarms"

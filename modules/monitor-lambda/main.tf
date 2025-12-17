@@ -1,7 +1,10 @@
 module "error_alarm" {
   source = "../common-alarm"
 
-  for_each = var.functions_config
+  for_each = {
+    for k, v in var.functions_config : k => v
+    if coalesce(v.enable_errors, var.enable_errors, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}lambda-${each.key}-high-errors"
   comparison_operator = "GreaterThanThreshold"
@@ -36,7 +39,10 @@ module "error_alarm" {
 module "throttles_alarm" {
   source = "../common-alarm"
 
-  for_each = var.functions_config
+  for_each = {
+    for k, v in var.functions_config : k => v
+    if coalesce(v.enable_throttles, var.enable_throttles, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}lambda-${each.key}-throttles"
   comparison_operator = "GreaterThanThreshold"
@@ -71,7 +77,10 @@ module "throttles_alarm" {
 module "duration_alarm" {
   source = "../common-alarm"
 
-  for_each = var.functions_config
+  for_each = {
+    for k, v in var.functions_config : k => v
+    if coalesce(v.enable_duration, var.enable_duration, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}lambda-${each.key}-high-duration"
   comparison_operator = "GreaterThanThreshold"
@@ -106,7 +115,10 @@ module "duration_alarm" {
 module "concurrent_executions_alarm" {
   source = "../common-alarm"
 
-  for_each = var.functions_config
+  for_each = {
+    for k, v in var.functions_config : k => v
+    if coalesce(v.enable_concurrent_executions, var.enable_concurrent_executions, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}lambda-${each.key}-high-concurrency"
   comparison_operator = "GreaterThanThreshold"

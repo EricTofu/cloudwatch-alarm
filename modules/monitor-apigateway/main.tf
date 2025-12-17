@@ -1,7 +1,10 @@
 module "error_5xx_alarm" {
   source = "../common-alarm"
 
-  for_each = var.apis_config
+  for_each = {
+    for k, v in var.apis_config : k => v
+    if coalesce(v.enable_5xx, var.enable_5xx, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}apigw-${each.key}-high-5xx"
   comparison_operator = "GreaterThanThreshold"
@@ -35,7 +38,10 @@ module "error_5xx_alarm" {
 module "latency_alarm" {
   source = "../common-alarm"
 
-  for_each = var.apis_config
+  for_each = {
+    for k, v in var.apis_config : k => v
+    if coalesce(v.enable_latency, var.enable_latency, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}apigw-${each.key}-high-latency"
   comparison_operator = "GreaterThanThreshold"

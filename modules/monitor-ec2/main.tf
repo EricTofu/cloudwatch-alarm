@@ -36,7 +36,10 @@ locals {
 module "cpu_alarm" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_cpu, var.enable_cpu, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-ec2" : local.alarm_prefix}-${local.instance_names[each.key]}-high-cpu"
   comparison_operator = "GreaterThanThreshold"
@@ -72,7 +75,10 @@ module "cpu_alarm" {
 module "memory_alarm" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_memory, var.enable_memory, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-ec2" : local.alarm_prefix}-${local.instance_names[each.key]}-high-memory"
   comparison_operator = "GreaterThanThreshold"
@@ -108,7 +114,10 @@ module "memory_alarm" {
 module "disk_alarm" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_disk, var.enable_disk, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-ec2" : local.alarm_prefix}-${local.instance_names[each.key]}-high-disk"
   comparison_operator = "GreaterThanThreshold"
@@ -146,7 +155,10 @@ module "disk_alarm" {
 module "network_in_alarm" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_network_in, var.enable_network_in, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-ec2" : local.alarm_prefix}-${local.instance_names[each.key]}-high-network-in"
   comparison_operator = "GreaterThanThreshold"
@@ -181,7 +193,10 @@ module "network_in_alarm" {
 module "network_out_alarm" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_network_out, var.enable_network_out, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-ec2" : local.alarm_prefix}-${local.instance_names[each.key]}-high-network-out"
   comparison_operator = "GreaterThanThreshold"
@@ -215,7 +230,10 @@ module "network_out_alarm" {
 module "status_check_failed" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_status_check, var.enable_status_check, true)
+  }
 
   alarm_name          = "${each.value.project != null ? "${each.value.project}-ec2" : local.alarm_prefix}-${local.instance_names[each.key]}-status-check-failed"
   comparison_operator = "GreaterThanThreshold"

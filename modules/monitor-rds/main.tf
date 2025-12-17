@@ -1,7 +1,10 @@
 module "cpu_alarm" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_cpu, var.enable_cpu, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}rds-${each.key}-high-cpu"
   comparison_operator = "GreaterThanThreshold"
@@ -36,7 +39,10 @@ module "cpu_alarm" {
 module "free_storage_space" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_free_storage, var.enable_free_storage, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}rds-${each.key}-low-storage"
   comparison_operator = "LessThanThreshold"
@@ -71,7 +77,10 @@ module "free_storage_space" {
 module "database_connections" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_connections, var.enable_connections, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}rds-${each.key}-high-connections"
   comparison_operator = "GreaterThanThreshold"
@@ -106,7 +115,10 @@ module "database_connections" {
 module "read_latency" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_read_latency, var.enable_read_latency, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}rds-${each.key}-high-read-latency"
   comparison_operator = "GreaterThanThreshold"
@@ -140,7 +152,10 @@ module "read_latency" {
 module "write_latency" {
   source = "../common-alarm"
 
-  for_each = var.instances_config
+  for_each = {
+    for k, v in var.instances_config : k => v
+    if coalesce(v.enable_write_latency, var.enable_write_latency, true)
+  }
 
   alarm_name          = "${var.project != "" ? "${var.project}-" : ""}rds-${each.key}-high-write-latency"
   comparison_operator = "GreaterThanThreshold"
