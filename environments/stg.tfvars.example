@@ -1,0 +1,50 @@
+# Staging Environment Configuration
+
+# AWS Configuration
+aws_region = "us-east-1"
+
+# Email notifications by severity
+alarm_emails = {
+  critical = ["staging-oncall@example.com"]
+  warning  = ["staging-team@example.com"]
+  info     = []
+}
+
+# EC2 Instances (Staging)
+ec2_instances = {
+  "i-stg-web-server" = {}
+  "i-stg-app-server" = {
+    cpu_threshold = 80
+  }
+}
+
+# RDS Instances (Staging)
+rds_instances = {
+  "staging-database" = {
+    connections_threshold = 85
+  }
+}
+
+# Lambda Functions (Staging)
+lambda_functions = {
+  "stg-api-handler" = {}
+}
+
+# ALBs (Staging)
+albs = {}
+
+# Target Groups (Staging)
+target_groups = {}
+
+# API Gateways (Staging)
+api_gateways = {}
+
+# S3 Buckets (Staging)
+s3_buckets = {}
+
+# Tags
+tags = {
+  Project     = "CloudWatch-Monitoring"
+  Environment = "staging"
+  Team        = "DevOps"
+}

@@ -1,0 +1,42 @@
+variable "albs_config" {
+  description = "Map of ALBs to monitor. Key is the ALB Name (not suffix)"
+  type = map(object({
+    htt_5xx_threshold = optional(number)
+    period            = optional(number)
+    eval_periods      = optional(number)
+  }))
+  default = {}
+}
+
+variable "target_groups_config" {
+  description = "Map of Target Groups to monitor. Key is the TG Name (not suffix)"
+  type = map(object({
+    htt_5xx_threshold = optional(number)
+    period            = optional(number)
+    eval_periods      = optional(number)
+  }))
+  default = {}
+}
+
+variable "project" {
+  description = "Project name"
+  type        = string
+  default     = ""
+}
+
+variable "alb_5xx_threshold" {}
+variable "target_group_5xx_threshold" {}
+variable "period" {}
+variable "eval_periods" {}
+
+variable "alarm_sns_topic_critical" {
+  description = "SNS topic ARN for critical alarms"
+  type        = string
+}
+
+
+variable "tags" {
+  description = "Tags to apply to resources"
+  type        = map(string)
+  default     = {}
+}

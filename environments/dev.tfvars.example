@@ -1,0 +1,48 @@
+# Development Environment Configuration
+
+# AWS Configuration
+aws_region = "us-east-1"
+
+# Email notifications by severity
+alarm_emails = {
+  critical = ["dev-oncall@example.com"]
+  warning  = ["dev-team@example.com"]
+  info     = []
+}
+
+# EC2 Instances (Development)
+ec2_instances = {
+  "i-dev-web-server" = {}
+  "i-dev-app-server" = {
+    cpu_threshold = 85
+  }
+}
+
+# RDS Instances (Development)
+rds_instances = {
+  "dev-database" = {}
+}
+
+# Lambda Functions (Development)
+lambda_functions = {
+  "dev-api-handler" = {}
+}
+
+# ALBs (Development)
+albs = {}
+
+# Target Groups (Development)
+target_groups = {}
+
+# API Gateways (Development)
+api_gateways = {}
+
+# S3 Buckets (Development)
+s3_buckets = {}
+
+# Tags
+tags = {
+  Project     = "CloudWatch-Monitoring"
+  Environment = "dev"
+  Team        = "DevOps"
+}

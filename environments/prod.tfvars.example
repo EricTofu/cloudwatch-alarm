@@ -1,0 +1,83 @@
+# Production Environment Configuration
+
+# Global project name (optional, can be overridden per-resource)
+project = ""
+
+# AWS Configuration
+aws_region = "us-east-1"
+
+# Email notifications by severity
+alarm_emails = {
+  critical = ["pagerduty@example.com", "prod-oncall@example.com"]
+  warning  = ["prod-team@example.com"]
+  info     = []
+}
+
+# EC2 Instances (Production)
+ec2_instances = {
+  # API Project instances
+  "i-api-web-1" = {
+    project = "api"
+  }
+  "i-api-web-2" = {
+    project = "api"
+    cpu_threshold = 85
+  }
+  
+  # Web Project instances
+  "i-web-frontend-1" = {
+    project = "web"
+    cpu_threshold = 75
+  }
+  "i-web-frontend-2" = {
+    project = "web"
+    cpu_threshold = 75
+  }
+  
+  # Shared infrastructure (no project)
+  "i-prod-db-primary" = {
+    cpu_threshold = 70
+    period = 60
+    eval_periods = 3
+  }
+}
+
+# RDS Instances (Production)
+rds_instances = {
+  "production-database" = {
+    connections_threshold = 90
+    read_latency_threshold = 0.015
+  }
+}
+
+# Lambda Functions (Production)
+lambda_functions = {
+  "prod-api-handler" = {}
+  "prod-data-processor" = {
+    duration_threshold = 120000
+  }
+}
+
+# ALBs (Production)
+albs = {
+  "production-alb" = {}
+}
+
+# Target Groups (Production)
+target_groups = {
+  "prod-api-tg" = {}
+}
+
+# API Gateways (Production)
+api_gateways = {}
+
+# S3 Buckets (Production)
+s3_buckets = {}
+
+# Tags
+tags = {
+  Project     = "CloudWatch-Monitoring"
+  Environment = "production"
+  Team        = "DevOps"
+  CostCenter  = "Engineering"
+}
