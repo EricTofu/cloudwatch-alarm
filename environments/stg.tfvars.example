@@ -18,6 +18,17 @@ ec2_instances = {
   }
 }
 
+# Auto Scaling Groups (Staging)
+auto_scaling_groups = {
+  "stg-app-asg" = {
+    project            = "app"
+    severity           = "warning"
+    cpu_threshold      = 75
+    memory_threshold   = 80
+    disk_threshold     = 85
+  }
+}
+
 # RDS Instances (Staging)
 rds_instances = {
   "staging-database" = {

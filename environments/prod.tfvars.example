@@ -35,10 +35,18 @@ ec2_instances = {
   }
   
   # Shared infrastructure (no project)
-  "i-prod-db-primary" = {
-    cpu_threshold = 70
-    period = 60
-    eval_periods = 3
+  }
+}
+
+# Auto Scaling Groups (Production)
+auto_scaling_groups = {
+  "prod-app-asg" = {
+    project            = "app"
+    severity           = "critical"
+    cpu_threshold      = 70
+    memory_threshold   = 75
+    disk_threshold     = 80
+    network_in_threshold = 500000000
   }
 }
 

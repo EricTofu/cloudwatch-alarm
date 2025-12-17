@@ -27,27 +27,41 @@ resource "null_resource" "profile_validation" {
 }
 
 # SNS Topics for different severity levels
+# Only create if valid ARN is not provided in var.sns_topic_arns
+
 resource "aws_sns_topic" "alerts_critical" {
-  name = "cloudwatch-alerts-critical-${var.TF_ENV}"
+  count = lookup(var.sns_topic_arns, "critical", null) == null ? 1 : 0
+  name  = "cloudwatch-alerts-critical-${var.TF_ENV}"
 }
 
 resource "aws_sns_topic" "alerts_warning" {
-  name = "cloudwatch-alerts-warning-${var.TF_ENV}"
+  count = lookup(var.sns_topic_arns, "warning", null) == null ? 1 : 0
+  name  = "cloudwatch-alerts-warning-${var.TF_ENV}"
 }
 
 resource "aws_sns_topic" "alerts_info" {
-  name = "cloudwatch-alerts-info-${var.TF_ENV}"
+  count = lookup(var.sns_topic_arns, "info", null) == null ? 1 : 0
+  name  = "cloudwatch-alerts-info-${var.TF_ENV}"
 }
 
 # Legacy single topic for backward compatibility
 resource "aws_sns_topic" "alerts" {
-  name = "cloudwatch-alerts-topic-${var.TF_ENV}"
+  count = var.alarm_email != null ? 1 : 0
+  name  = "cloudwatch-alerts-topic-${var.TF_ENV}"
+}
+
+locals {
+  # Resolve Topic ARNs: Use existing if provided, else use created
+  critical_topic_arn = lookup(var.sns_topic_arns, "critical", null) != null ? var.sns_topic_arns["critical"] : aws_sns_topic.alerts_critical[0].arn
+  warning_topic_arn  = lookup(var.sns_topic_arns, "warning", null) != null ? var.sns_topic_arns["warning"] : aws_sns_topic.alerts_warning[0].arn
+  info_topic_arn     = lookup(var.sns_topic_arns, "info", null) != null ? var.sns_topic_arns["info"] : aws_sns_topic.alerts_info[0].arn
+  legacy_topic_arn   = var.alarm_email != null ? aws_sns_topic.alerts[0].arn : null
 }
 
 # Email subscriptions for critical alerts
 resource "aws_sns_topic_subscription" "critical_email" {
   for_each  = toset(var.alarm_emails.critical)
-  topic_arn = aws_sns_topic.alerts_critical.arn
+  topic_arn = local.critical_topic_arn
   protocol  = "email"
   endpoint  = each.value
 }
@@ -55,7 +69,7 @@ resource "aws_sns_topic_subscription" "critical_email" {
 # Email subscriptions for warning alerts
 resource "aws_sns_topic_subscription" "warning_email" {
   for_each  = toset(var.alarm_emails.warning)
-  topic_arn = aws_sns_topic.alerts_warning.arn
+  topic_arn = local.warning_topic_arn
   protocol  = "email"
   endpoint  = each.value
 }
@@ -63,7 +77,7 @@ resource "aws_sns_topic_subscription" "warning_email" {
 # Email subscriptions for info alerts
 resource "aws_sns_topic_subscription" "info_email" {
   for_each  = toset(var.alarm_emails.info)
-  topic_arn = aws_sns_topic.alerts_info.arn
+  topic_arn = local.info_topic_arn
   protocol  = "email"
   endpoint  = each.value
 }
@@ -71,7 +85,7 @@ resource "aws_sns_topic_subscription" "info_email" {
 # Legacy email subscription
 resource "aws_sns_topic_subscription" "email_alerts" {
   count     = var.alarm_email != null ? 1 : 0
-  topic_arn = aws_sns_topic.alerts.arn
+  topic_arn = local.legacy_topic_arn
   protocol  = "email"
   endpoint  = var.alarm_email
 }
@@ -88,9 +102,9 @@ module "monitor_ec2" {
   network_out_threshold  = var.ec2_network_out_threshold
   period                 = var.ec2_period
   eval_periods           = var.ec2_eval_periods
-  alarm_sns_topic_critical = aws_sns_topic.alerts_critical.arn
-  alarm_sns_topic_warning  = aws_sns_topic.alerts_warning.arn
-  alarm_sns_topic_info     = aws_sns_topic.alerts_info.arn
+  alarm_sns_topic_critical = local.critical_topic_arn
+  alarm_sns_topic_warning  = local.warning_topic_arn
+  alarm_sns_topic_info     = local.info_topic_arn
 }
 
 module "monitor_rds" {
@@ -105,8 +119,8 @@ module "monitor_rds" {
   write_latency_threshold = var.rds_write_latency_threshold
   period                 = var.rds_period
   eval_periods           = var.rds_eval_periods
-  alarm_sns_topic_critical = aws_sns_topic.alerts_critical.arn
-  alarm_sns_topic_warning  = aws_sns_topic.alerts_warning.arn
+  alarm_sns_topic_critical = local.critical_topic_arn
+  alarm_sns_topic_warning  = local.warning_topic_arn
 }
 
 module "monitor_lambda" {
@@ -120,8 +134,8 @@ module "monitor_lambda" {
   concurrent_executions_threshold = var.lambda_concurrent_executions_threshold
   period             = var.lambda_period
   eval_periods       = var.lambda_eval_periods
-  alarm_sns_topic_critical = aws_sns_topic.alerts_critical.arn
-  alarm_sns_topic_warning  = aws_sns_topic.alerts_warning.arn
+  alarm_sns_topic_critical = local.critical_topic_arn
+  alarm_sns_topic_warning  = local.warning_topic_arn
 }
 
 module "monitor_alb" {
@@ -134,7 +148,7 @@ module "monitor_alb" {
   target_group_5xx_threshold = var.target_group_5xx_threshold
   period                     = var.alb_period
   eval_periods               = var.alb_eval_periods
-  alarm_sns_topic_critical = aws_sns_topic.alerts_critical.arn
+  alarm_sns_topic_critical = local.critical_topic_arn
 }
 
 module "monitor_apigateway" {
@@ -146,7 +160,7 @@ module "monitor_apigateway" {
   latency_threshold   = var.api_gateway_latency_threshold
   period              = var.api_gateway_period
   eval_periods        = var.api_gateway_eval_periods
-  alarm_sns_topic_critical = aws_sns_topic.alerts_critical.arn
+  alarm_sns_topic_critical = local.critical_topic_arn
 }
 
 module "monitor_s3" {
@@ -158,7 +172,7 @@ module "monitor_s3" {
   error_5xx_threshold = var.s3_5xx_threshold
   period              = var.s3_period
   eval_periods        = var.s3_eval_periods
-  alarm_sns_topic_critical = aws_sns_topic.alerts_critical.arn
+  alarm_sns_topic_critical = local.critical_topic_arn
 }
 
 module "monitor_asg" {
@@ -173,7 +187,7 @@ module "monitor_asg" {
   network_out_threshold = var.asg_network_out_threshold
   period           = var.asg_period
   eval_periods     = var.asg_eval_periods
-  alarm_sns_topic_critical = aws_sns_topic.alerts_critical.arn
-  alarm_sns_topic_warning  = aws_sns_topic.alerts_warning.arn
-  alarm_sns_topic_info     = aws_sns_topic.alerts_info.arn
+  alarm_sns_topic_critical = local.critical_topic_arn
+  alarm_sns_topic_warning  = local.warning_topic_arn
+  alarm_sns_topic_info     = local.info_topic_arn
 }

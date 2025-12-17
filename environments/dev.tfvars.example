@@ -18,6 +18,17 @@ ec2_instances = {
   }
 }
 
+# Auto Scaling Groups (Development)
+auto_scaling_groups = {
+  "dev-app-asg" = {
+    project            = "app"
+    severity           = "warning"
+    cpu_threshold      = 80
+    memory_threshold   = 85
+    disk_threshold     = 90
+  }
+}
+
 # RDS Instances (Development)
 rds_instances = {
   "dev-database" = {}

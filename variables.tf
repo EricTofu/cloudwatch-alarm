@@ -62,6 +62,12 @@ variable "alarm_emails" {
   }
 }
 
+variable "sns_topic_arns" {
+  description = "Existing SNS Topic ARNs to use instead of creating new ones. Key: critical, warning, info"
+  type        = map(string)
+  default     = {}
+}
+
 # --- Service Configurations ---
 
 # EC2
