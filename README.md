@@ -153,23 +153,40 @@ ec2_instances = {
 }
 ```
 
+### Using Existing SNS Topics
+
+If you have centralized SNS topics created by another stack or manually, you can use them instead of having this module create new ones.
+
+Define the `sns_topic_arns` variable map. The module will **skip creating** the topic for any severity key provided and use your ARN instead.
+
+```hcl
+# In your .tfvars file
+sns_topic_arns = {
+  critical = "arn:aws:sns:us-east-1:123456789012:my-central-critical-topic"
+  # warning  = "..." (Optional)
+}
+```
+
+- **Partial Overrides**: You can provide just `critical` and leave others empty; the module will create new topics for `warning` and `info`.
+- **Subscriptions**: Emails defined in `alarm_emails` will act as normal subscriptions to whichever topic is used (existing or created).
+
 ### Severity Levels
 
 Alarms are automatically routed to severity-specific SNS topics:
 
-**Critical Alarms** → `cloudwatch-alerts-critical-{env}`
+**Critical Alarms** → `cloudwatch-alerts-critical-{env}` (or provided ARN)
 - EC2: CPU, Status Checks
 - RDS: CPU
 - Lambda: Errors, Throttles
 - ALB/API Gateway/S3: 5XX Errors
 - ASG: CPU, Status Checks
 
-**Warning Alarms** → `cloudwatch-alerts-warning-{env}`
+**Warning Alarms** → `cloudwatch-alerts-warning-{env}` (or provided ARN)
 - EC2: Memory, Disk
 - RDS: Storage, Connections, Latency
 - Lambda: Duration, Concurrent Executions
 
-**Info Alarms** → `cloudwatch-alerts-info-{env}`
+**Info Alarms** → `cloudwatch-alerts-info-{env}` (or provided ARN)
 - EC2: Network I/O
 
 Configure different email lists per severity:

@@ -10,6 +10,11 @@ alarm_emails = {
   info     = []
 }
 
+# Optional: Use existing SNS topics instead of creating new ones
+# sns_topic_arns = {
+#   critical = "arn:aws:sns:us-east-1:123456789012:existing-critical-topic"
+# }
+
 # EC2 Instances (Development)
 ec2_instances = {
   "i-dev-web-server" = {}
