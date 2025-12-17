@@ -15,6 +15,9 @@ variable "auto_scaling_groups" {
     enable_cpu              = optional(bool)
     enable_memory           = optional(bool)
     enable_disk             = optional(bool)
+    disk_path               = optional(string)
+    disk_device             = optional(string)
+    disk_fstype             = optional(string)
     enable_network_in       = optional(bool)
     enable_network_out      = optional(bool)
     enable_status_check     = optional(bool)
@@ -38,6 +41,18 @@ variable "disk_threshold" {
   description = "Default Disk utilization threshold (percent)"
   type        = number
   default     = 80
+}
+
+variable "disk_path" {
+  default     = "/"
+}
+
+variable "disk_device" {
+  default     = "nvme0n1p1"
+}
+
+variable "disk_fstype" {
+  default     = "ext4"
 }
 
 variable "network_in_threshold" {
