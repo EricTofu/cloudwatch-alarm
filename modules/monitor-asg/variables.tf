@@ -10,7 +10,7 @@ variable "auto_scaling_groups" {
     network_out_threshold  = optional(number)
     status_check_threshold = optional(number)
     period                 = optional(number)
-    period                 = optional(number)
+
     eval_periods           = optional(number)
     enable_cpu              = optional(bool)
     enable_memory           = optional(bool)

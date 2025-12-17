@@ -169,6 +169,14 @@ variable "asg_eval_periods" {
   default     = 1
 }
 
+# ASG Enable/Disable Flags
+variable "asg_enable_cpu" { default = true }
+variable "asg_enable_memory" { default = true }
+variable "asg_enable_disk" { default = true }
+variable "asg_enable_network_in" { default = true }
+variable "asg_enable_network_out" { default = true }
+variable "asg_enable_status_check" { default = true }
+
 # RDS
 variable "rds_instances" {
   description = "Map of RDS instances to monitor. Key=ID, Value=Config"

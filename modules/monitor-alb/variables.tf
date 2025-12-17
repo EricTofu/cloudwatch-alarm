@@ -4,7 +4,7 @@ variable "albs_config" {
     htt_5xx_threshold = optional(number)
     severity          = optional(string)
     period            = optional(number)
-    period            = optional(number)
+
     eval_periods      = optional(number)
     enable_alb_5xx    = optional(bool)
   }))
@@ -17,7 +17,7 @@ variable "target_groups_config" {
     htt_5xx_threshold = optional(number)
     severity          = optional(string)
     period            = optional(number)
-    period            = optional(number)
+
     eval_periods      = optional(number)
     enable_target_group_5xx = optional(bool)
   }))
@@ -33,7 +33,7 @@ variable "project" {
 variable "alb_5xx_threshold" {}
 variable "target_group_5xx_threshold" {}
 variable "period" {}
-variable "period" {}
+
 variable "eval_periods" {}
 
 # Global Enable Flags

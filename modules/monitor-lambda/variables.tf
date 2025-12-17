@@ -7,7 +7,7 @@ variable "functions_config" {
     duration_threshold = optional(number)
     concurrent_executions_threshold = optional(number)
     period             = optional(number)
-    period             = optional(number)
+
     eval_periods       = optional(number)
     enable_errors                   = optional(bool)
     enable_throttles                = optional(bool)
@@ -28,7 +28,7 @@ variable "throttle_threshold" {}
 variable "duration_threshold" {}
 variable "concurrent_executions_threshold" {}
 variable "period" {}
-variable "period" {}
+
 variable "eval_periods" {}
 
 # Global Enable Flags

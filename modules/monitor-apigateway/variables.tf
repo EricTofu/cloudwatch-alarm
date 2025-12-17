@@ -5,7 +5,7 @@ variable "apis_config" {
     severity            = optional(string)
     latency_threshold   = optional(number)
     period              = optional(number)
-    period              = optional(number)
+
     eval_periods        = optional(number)
     enable_5xx          = optional(bool)
     enable_latency      = optional(bool)
@@ -22,7 +22,7 @@ variable "project" {
 variable "error_5xx_threshold" {}
 variable "latency_threshold" {}
 variable "period" {}
-variable "period" {}
+
 variable "eval_periods" {}
 
 # Global Enable Flags
