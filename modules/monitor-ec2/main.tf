@@ -1,14 +1,32 @@
-# Fetch instance details (specifically Tags)
+# Fetch instance details (ID or Name lookup)
 data "aws_instance" "this" {
-  for_each    = var.instances_config
-  instance_id = each.key
+  for_each = var.instances_config
+
+  # If key looks like an Instance ID (starts with i-), use it directly.
+  # Otherwise, don't set instance_id (it will be null) and use the filter below.
+  instance_id = can(regex("^i-", each.key)) ? each.key : null
+
+  dynamic "filter" {
+    # Only apply filter if key is NOT an Instance ID
+    for_each = can(regex("^i-", each.key)) ? [] : [1]
+    content {
+      name   = "tag:Name"
+      values = [each.key]
+    }
+  }
 }
 
 locals {
-  # Map ID -> "Name tag" OR "ID" (fallback)
+  # Map config key -> Resolved Instance ID
+  resolved_ids = {
+    for k, v in data.aws_instance.this : k => v.id
+  }
+
+  # Map Resolved ID -> "Name tag" OR "ID" (fallback)
+  # using the input key as fallback if Name tag is missing
   instance_names = {
-    for id, config in var.instances_config :
-    id => try(data.aws_instance.this[id].tags["Name"], id)
+    for k, v in data.aws_instance.this :
+    k => try(v.tags["Name"], k)
   }
   
   # Alarm name prefix with optional project
@@ -41,7 +59,7 @@ module "cpu_alarm" {
   ]
 
   dimensions = {
-    InstanceId = each.key
+    InstanceId = local.resolved_ids[each.key]
   }
 
   tags = merge(var.tags, {
@@ -77,7 +95,7 @@ module "memory_alarm" {
   ]
 
   dimensions = {
-    InstanceId = each.key
+    InstanceId = local.resolved_ids[each.key]
   }
 
   tags = merge(var.tags, {
@@ -113,7 +131,7 @@ module "disk_alarm" {
   ]
 
   dimensions = {
-    InstanceId = each.key
+    InstanceId = local.resolved_ids[each.key]
     path       = "/"
     fstype     = "ext4"
   }
@@ -151,7 +169,7 @@ module "network_in_alarm" {
   ]
 
   dimensions = {
-    InstanceId = each.key
+    InstanceId = local.resolved_ids[each.key]
   }
 
   tags = merge(var.tags, {
@@ -186,7 +204,7 @@ module "network_out_alarm" {
   ]
 
   dimensions = {
-    InstanceId = each.key
+    InstanceId = local.resolved_ids[each.key]
   }
 
   tags = merge(var.tags, {
@@ -220,7 +238,7 @@ module "status_check_failed" {
   ]
 
   dimensions = {
-    InstanceId = each.key
+    InstanceId = local.resolved_ids[each.key]
   }
 
   tags = merge(var.tags, {
